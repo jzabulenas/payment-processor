@@ -19,10 +19,11 @@ public class PaymentController {
   }
 
   @PostMapping("/payments")
-  public ResponseEntity<Payment> createPayment(@RequestBody PaymentRequestDTO paymentRequestDTO) {
-    Payment savedPayment = this.paymentService.createPayment(paymentRequestDTO);
+  public ResponseEntity<PaymentResponseDTO> createPayment(
+      @RequestBody PaymentRequestDTO paymentRequestDTO) {
+    PaymentResponseDTO paymentResponseDTO = this.paymentService.createPayment(paymentRequestDTO);
 
-    return ResponseEntity.ok(savedPayment);
+    return ResponseEntity.ok(paymentResponseDTO);
   }
 
 }

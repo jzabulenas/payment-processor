@@ -13,9 +13,8 @@ public class PaymentService {
     this.paymentRepository = paymentRepository;
   }
 
-  public Payment createPayment(PaymentRequestDTO paymentRequestDTO) {
-    Payment payment = new Payment(
-        paymentRequestDTO.type(),
+  public PaymentResponseDTO createPayment(PaymentRequestDTO paymentRequestDTO) {
+    Payment payment = new Payment(paymentRequestDTO.type(),
         paymentRequestDTO.amount(),
         paymentRequestDTO.currency(),
         paymentRequestDTO.debtorIban(),
@@ -24,6 +23,15 @@ public class PaymentService {
     payment.setDetails(paymentRequestDTO.details());
     payment.setCreditorBic(paymentRequestDTO.creditorBic());
 
-    return this.paymentRepository.save(payment);
+    Payment savedPayment = this.paymentRepository.save(payment);
+
+    return new PaymentResponseDTO(savedPayment.getId(),
+        savedPayment.getType(),
+        savedPayment.getAmount(),
+        savedPayment.getCurrency(),
+        savedPayment.getDebtorIban(),
+        savedPayment.getCreditorIban(),
+        savedPayment.getDetails(),
+        savedPayment.getCreditorBic());
   }
 }
