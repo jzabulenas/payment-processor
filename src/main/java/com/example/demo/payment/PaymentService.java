@@ -13,7 +13,17 @@ public class PaymentService {
     this.paymentRepository = paymentRepository;
   }
 
-  public Payment createPayment(Payment payment) {
+  public Payment createPayment(PaymentRequestDTO paymentRequestDTO) {
+    Payment payment = new Payment(
+        paymentRequestDTO.type(),
+        paymentRequestDTO.amount(),
+        paymentRequestDTO.currency(),
+        paymentRequestDTO.debtorIban(),
+        paymentRequestDTO.creditorIban());
+
+    payment.setDetails(paymentRequestDTO.details());
+    payment.setCreditorBic(paymentRequestDTO.creditorBic());
+
     return this.paymentRepository.save(payment);
   }
 }
