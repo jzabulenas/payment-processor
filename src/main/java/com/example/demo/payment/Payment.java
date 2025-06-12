@@ -33,12 +33,14 @@ public class Payment {
   }
 
   public Payment(PaymentType type, BigDecimal amount, String currency, String debtorIban,
-      String creditorIban) {
+      String creditorIban, String details, String creditorBic) {
     this.type = type;
     this.amount = amount;
     this.currency = currency;
     this.debtorIban = debtorIban;
     this.creditorIban = creditorIban;
+    this.details = details;
+    this.creditorBic = creditorBic;
   }
 
   public PaymentType getType() {

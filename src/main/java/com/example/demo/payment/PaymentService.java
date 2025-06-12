@@ -18,10 +18,9 @@ public class PaymentService {
         paymentRequestDTO.amount(),
         paymentRequestDTO.currency(),
         paymentRequestDTO.debtorIban(),
-        paymentRequestDTO.creditorIban());
-
-    payment.setDetails(paymentRequestDTO.details());
-    payment.setCreditorBic(paymentRequestDTO.creditorBic());
+        paymentRequestDTO.creditorIban(),
+        paymentRequestDTO.details(),
+        paymentRequestDTO.creditorBic());
 
     Payment savedPayment = this.paymentRepository.save(payment);
 
