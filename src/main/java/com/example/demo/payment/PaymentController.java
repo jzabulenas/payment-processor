@@ -11,17 +11,18 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api")
 public class PaymentController {
 
-  private final PaymentRepository paymentRepository;
+  private final PaymentService paymentService;
 
   @Autowired
-  public PaymentController(PaymentRepository paymentRepository) {
-    this.paymentRepository = paymentRepository;
+  public PaymentController(PaymentService paymentService) {
+    this.paymentService = paymentService;
   }
 
   @PostMapping("/payments")
   public ResponseEntity<Payment> createPayment(@RequestBody Payment payment) {
-    Payment savedPayment = this.paymentRepository.save(payment);
+    Payment savedPayment = this.paymentService.createPayment(payment);
 
     return ResponseEntity.ok(savedPayment);
   }
+
 }
