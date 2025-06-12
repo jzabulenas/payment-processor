@@ -1,6 +1,7 @@
 package com.example.demo.payment;
 
 import static org.hamcrest.Matchers.aMapWithSize;
+import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -8,6 +9,7 @@ import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.times;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -68,7 +70,7 @@ public class PaymentControllerTest {
         .perform(post("/api/payments")
             .contentType(MediaType.APPLICATION_JSON)
             .content(new ObjectMapper().writeValueAsString(paymentRequestDTO)))
-        .andExpect(status().isOk())
+        .andExpect(status().isCreated())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
         .andExpect(jsonPath("$", aMapWithSize(8)))
         .andExpect(jsonPath("id", equalTo((int) paymentResponseDTO.id())))
@@ -78,7 +80,8 @@ public class PaymentControllerTest {
         .andExpect(jsonPath("debtorIban", equalTo(paymentResponseDTO.debtorIban())))
         .andExpect(jsonPath("creditorIban", equalTo(paymentResponseDTO.creditorIban())))
         .andExpect(jsonPath("details", equalTo(paymentResponseDTO.details())))
-        .andExpect(jsonPath("creditorBic", equalTo(paymentResponseDTO.creditorBic())));
+        .andExpect(jsonPath("creditorBic", equalTo(paymentResponseDTO.creditorBic())))
+        .andExpect(header().string("Location", containsString("/api/payments/0")));
 
     then(this.paymentService).should(times(1)).createPayment(any(PaymentRequestDTO.class));
   }

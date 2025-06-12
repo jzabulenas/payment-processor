@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @RestController
 @RequestMapping("/api")
@@ -23,7 +24,11 @@ public class PaymentController {
       @RequestBody PaymentRequestDTO paymentRequestDTO) {
     PaymentResponseDTO paymentResponseDTO = this.paymentService.createPayment(paymentRequestDTO);
 
-    return ResponseEntity.ok(paymentResponseDTO);
+    return ResponseEntity.created(ServletUriComponentsBuilder.fromCurrentRequest()
+        .path("/{id}")
+        .buildAndExpand(paymentResponseDTO.id())
+        .toUri())
+        .body(paymentResponseDTO);
   }
 
 }
