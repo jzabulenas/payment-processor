@@ -3,6 +3,8 @@ package com.example.demo.payment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.demo.exception.PaymentValidationException;
+
 @Service
 public class PaymentService {
 
@@ -14,6 +16,16 @@ public class PaymentService {
   }
 
   public PaymentResponseDTO createPayment(PaymentRequestDTO paymentRequestDTO) {
+    switch (paymentRequestDTO.type()) {
+
+    case TYPE1:
+      if (!"EUR".equals(paymentRequestDTO.currency())) {
+        throw new PaymentValidationException("TYPE1 payments are only allowed for EUR");
+      }
+
+      break;
+    }
+
     Payment payment = PaymentMapper.toEntity(paymentRequestDTO);
 
     Payment savedPayment = this.paymentRepository.save(payment);
