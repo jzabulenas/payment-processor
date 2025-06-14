@@ -37,4 +37,24 @@ public class GlobalExceptionHandler {
 
     return ResponseEntity.badRequest().body(error);
   }
+
+  @ExceptionHandler(PaymentNotFoundException.class)
+  public ResponseEntity<Map<String, String>> handlePaymentNotFoundException(
+      PaymentNotFoundException ex) {
+
+    Map<String, String> error = new HashMap<>();
+    error.put("error", ex.getMessage());
+
+    return ResponseEntity.badRequest().body(error);
+  }
+
+  @ExceptionHandler(PaymentCancellationException.class)
+  public ResponseEntity<Map<String, String>> handlePaymentCancellationException(
+      PaymentCancellationException ex) {
+
+    Map<String, String> error = new HashMap<>();
+    error.put("error", ex.getMessage());
+
+    return ResponseEntity.badRequest().body(error);
+  }
 }
