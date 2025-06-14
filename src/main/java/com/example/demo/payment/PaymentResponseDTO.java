@@ -1,6 +1,7 @@
 package com.example.demo.payment;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 public record PaymentResponseDTO(long id,
     PaymentType type,
@@ -9,6 +10,10 @@ public record PaymentResponseDTO(long id,
     String debtorIban,
     String creditorIban,
     String details,
-    String creditorBic) {
+    String creditorBic,
+    LocalDateTime createdAt,
+    LocalDateTime cancelledAt,
+    BigDecimal cancellationFee,
+    boolean cancelled) {
 
 }
