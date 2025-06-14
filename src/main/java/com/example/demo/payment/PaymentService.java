@@ -14,23 +14,10 @@ public class PaymentService {
   }
 
   public PaymentResponseDTO createPayment(PaymentRequestDTO paymentRequestDTO) {
-    Payment payment = new Payment(paymentRequestDTO.type(),
-        paymentRequestDTO.amount(),
-        paymentRequestDTO.currency(),
-        paymentRequestDTO.debtorIban(),
-        paymentRequestDTO.creditorIban(),
-        paymentRequestDTO.details(),
-        paymentRequestDTO.creditorBic());
+    Payment payment = PaymentMapper.toEntity(paymentRequestDTO);
 
     Payment savedPayment = this.paymentRepository.save(payment);
 
-    return new PaymentResponseDTO(savedPayment.getId(),
-        savedPayment.getType(),
-        savedPayment.getAmount(),
-        savedPayment.getCurrency(),
-        savedPayment.getDebtorIban(),
-        savedPayment.getCreditorIban(),
-        savedPayment.getDetails(),
-        savedPayment.getCreditorBic());
+    return PaymentMapper.toDTO(savedPayment);
   }
 }
