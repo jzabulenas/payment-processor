@@ -27,6 +27,13 @@ public class PaymentService {
         }
 
         break;
+
+      case TYPE2:
+        if (!"USD".equals(paymentRequestDTO.currency())) {
+          throw new PaymentValidationException("TYPE2 payments are only allowed for USD");
+        }
+
+        break;
     }
 
     Payment payment = PaymentMapper.toEntity(paymentRequestDTO);
