@@ -17,13 +17,16 @@ public class PaymentService {
 
   public PaymentResponseDTO createPayment(PaymentRequestDTO paymentRequestDTO) {
     switch (paymentRequestDTO.type()) {
+      case TYPE1:
+        if (!"EUR".equals(paymentRequestDTO.currency())) {
+          throw new PaymentValidationException("TYPE1 payments are only allowed for EUR");
+        }
 
-    case TYPE1:
-      if (!"EUR".equals(paymentRequestDTO.currency())) {
-        throw new PaymentValidationException("TYPE1 payments are only allowed for EUR");
-      }
+        if (paymentRequestDTO.details() == null) {
+          throw new PaymentValidationException("Field 'details' is required for TYPE1 payments");
+        }
 
-      break;
+        break;
     }
 
     Payment payment = PaymentMapper.toEntity(paymentRequestDTO);
