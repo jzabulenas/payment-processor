@@ -34,6 +34,14 @@ public class PaymentService {
         }
 
         break;
+
+      case TYPE3:
+        if (!"EUR".equals(paymentRequestDTO.currency())
+            && !"USD".equals(paymentRequestDTO.currency())) {
+          throw new PaymentValidationException("TYPE3 payments are only allowed for EUR or USD");
+        }
+
+        break;
     }
 
     Payment payment = PaymentMapper.toEntity(paymentRequestDTO);
