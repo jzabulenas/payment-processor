@@ -8,6 +8,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.times;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -56,6 +57,7 @@ public class PaymentControllerTest {
         "FR1420041010050500013M02606",
         "Invoice payment",
         null);
+
     PaymentResponseDTO paymentResponseDTO = new PaymentResponseDTO(0,
         paymentRequestDTO.type(),
         paymentRequestDTO.amount(),
@@ -71,7 +73,6 @@ public class PaymentControllerTest {
 
     given(this.paymentService.createPayment(any(PaymentRequestDTO.class)))
         .willReturn(paymentResponseDTO);
-
     this.mockMvc
         .perform(post("/api/payments")
             .contentType(MediaType.APPLICATION_JSON)
@@ -95,4 +96,62 @@ public class PaymentControllerTest {
 
     then(this.paymentService).should(times(1)).createPayment(any(PaymentRequestDTO.class));
   }
+
+  // cancelPayment
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+
+  @Test
+  void cancelPayment_whenCancelPayment_thenReturnBodyAnd200() throws Exception {
+    long paymentId = 0L;
+    LocalDateTime cancelledAt = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
+    BigDecimal cancellationFee = BigDecimal.valueOf(0.05);
+
+    PaymentResponseDTO cancelledPayment = new PaymentResponseDTO(
+        paymentId,
+        PaymentType.TYPE1,
+        BigDecimal.valueOf(100.50),
+        "EUR",
+        "DE89370400440532013000",
+        "FR1420041010050500013M02606",
+        "Invoice payment",
+        null,
+        LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS),
+        cancelledAt,
+        cancellationFee,
+        true);
+
+    given(this.paymentService.cancelPayment(paymentId))
+        .willReturn(cancelledPayment);
+
+    this.mockMvc
+        .perform(put("/api/payments/{id}/cancel", paymentId)
+            .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk())
+        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+        .andExpect(jsonPath("$", aMapWithSize(12)))
+        .andExpect(jsonPath("id", equalTo((int) cancelledPayment.id())))
+        .andExpect(jsonPath("type", equalTo(cancelledPayment.type().toString())))
+        .andExpect(jsonPath("amount", equalTo(cancelledPayment.amount().doubleValue())))
+        .andExpect(jsonPath("currency", equalTo(cancelledPayment.currency())))
+        .andExpect(jsonPath("debtorIban", equalTo(cancelledPayment.debtorIban())))
+        .andExpect(jsonPath("creditorIban", equalTo(cancelledPayment.creditorIban())))
+        .andExpect(jsonPath("details", equalTo(cancelledPayment.details())))
+        .andExpect(jsonPath("creditorBic", equalTo(cancelledPayment.creditorBic())))
+        .andExpect(jsonPath("createdAt", equalTo(cancelledPayment.createdAt().toString())))
+        .andExpect(jsonPath("cancelledAt", equalTo(cancelledPayment.cancelledAt().toString())))
+        .andExpect(jsonPath("cancellationFee", equalTo(cancelledPayment.cancellationFee()
+            .doubleValue())))
+        .andExpect(jsonPath("cancelled", equalTo(true)));
+
+    then(this.paymentService).should(times(1)).cancelPayment(paymentId);
+  }
+
 }
