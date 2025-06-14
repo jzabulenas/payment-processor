@@ -41,6 +41,10 @@ public class PaymentService {
           throw new PaymentValidationException("TYPE3 payments are only allowed for EUR or USD");
         }
 
+        if (paymentRequestDTO.creditorBic() == null) {
+          throw new PaymentValidationException("TYPE3 payments require 'creditorBic' field");
+        }
+
         break;
     }
 
