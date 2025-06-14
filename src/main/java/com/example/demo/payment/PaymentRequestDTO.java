@@ -9,7 +9,7 @@ import jakarta.validation.constraints.Pattern;
 public record PaymentRequestDTO(
     @NotNull PaymentType type,
     @NotNull @DecimalMin(value = "0.01") BigDecimal amount,
-    @NotNull @Pattern(regexp = "^(EUR|USD)$") String currency,
+    @NotNull @Pattern(regexp = "^(EUR|USD)$", message = "Must be EUR or USD") String currency,
     @NotNull String debtorIban,
     @NotNull String creditorIban,
     String details,
