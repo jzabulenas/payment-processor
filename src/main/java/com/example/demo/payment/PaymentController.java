@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/api")
 public class PaymentController {
@@ -21,7 +23,7 @@ public class PaymentController {
 
   @PostMapping("/payments")
   public ResponseEntity<PaymentResponseDTO> createPayment(
-      @RequestBody PaymentRequestDTO paymentRequestDTO) {
+      @RequestBody @Valid PaymentRequestDTO paymentRequestDTO) {
     PaymentResponseDTO paymentResponseDTO = this.paymentService.createPayment(paymentRequestDTO);
 
     return ResponseEntity.created(ServletUriComponentsBuilder.fromCurrentRequest()
