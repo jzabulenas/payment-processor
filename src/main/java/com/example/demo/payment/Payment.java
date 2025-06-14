@@ -1,6 +1,7 @@
 package com.example.demo.payment;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -27,6 +28,10 @@ public class Payment {
   private String creditorIban;
   private String details;
   private String creditorBic;
+  private LocalDateTime createdAt;
+  private LocalDateTime cancelledAt;
+  private BigDecimal cancellationFee;
+  private boolean cancelled;
 
   public Payment() {
 
@@ -41,6 +46,8 @@ public class Payment {
     this.creditorIban = creditorIban;
     this.details = details;
     this.creditorBic = creditorBic;
+    this.createdAt = LocalDateTime.now();
+    this.cancelled = false;
   }
 
   public PaymentType getType() {
@@ -101,6 +108,38 @@ public class Payment {
 
   public Long getId() {
     return id;
+  }
+
+  public LocalDateTime getCreatedAt() {
+    return createdAt;
+  }
+
+  public void setCreatedAt(LocalDateTime createdAt) {
+    this.createdAt = createdAt;
+  }
+
+  public LocalDateTime getCancelledAt() {
+    return cancelledAt;
+  }
+
+  public void setCancelledAt(LocalDateTime cancelledAt) {
+    this.cancelledAt = cancelledAt;
+  }
+
+  public BigDecimal getCancellationFee() {
+    return cancellationFee;
+  }
+
+  public void setCancellationFee(BigDecimal cancellationFee) {
+    this.cancellationFee = cancellationFee;
+  }
+
+  public boolean isCancelled() {
+    return cancelled;
+  }
+
+  public void setCancelled(boolean cancelled) {
+    this.cancelled = cancelled;
   }
 
 }
