@@ -14,6 +14,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,7 +63,11 @@ public class PaymentControllerTest {
         paymentRequestDTO.debtorIban(),
         paymentRequestDTO.creditorIban(),
         paymentRequestDTO.details(),
-        paymentRequestDTO.creditorBic());
+        paymentRequestDTO.creditorBic(),
+        LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS),
+        null,
+        null,
+        false);
 
     given(this.paymentService.createPayment(any(PaymentRequestDTO.class)))
         .willReturn(paymentResponseDTO);
@@ -72,7 +78,7 @@ public class PaymentControllerTest {
             .content(new ObjectMapper().writeValueAsString(paymentRequestDTO)))
         .andExpect(status().isCreated())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-        .andExpect(jsonPath("$", aMapWithSize(8)))
+        .andExpect(jsonPath("$", aMapWithSize(12)))
         .andExpect(jsonPath("id", equalTo((int) paymentResponseDTO.id())))
         .andExpect(jsonPath("type", equalTo(paymentResponseDTO.type().toString())))
         .andExpect(jsonPath("amount", equalTo(paymentResponseDTO.amount().doubleValue())))
@@ -81,6 +87,10 @@ public class PaymentControllerTest {
         .andExpect(jsonPath("creditorIban", equalTo(paymentResponseDTO.creditorIban())))
         .andExpect(jsonPath("details", equalTo(paymentResponseDTO.details())))
         .andExpect(jsonPath("creditorBic", equalTo(paymentResponseDTO.creditorBic())))
+        .andExpect(jsonPath("createdAt", equalTo(paymentResponseDTO.createdAt().toString())))
+        .andExpect(jsonPath("cancelledAt", equalTo(null)))
+        .andExpect(jsonPath("cancellationFee", equalTo(null)))
+        .andExpect(jsonPath("cancelled", equalTo(false)))
         .andExpect(header().string("Location", containsString("/api/payments/0")));
 
     then(this.paymentService).should(times(1)).createPayment(any(PaymentRequestDTO.class));
