@@ -70,7 +70,8 @@ public class PaymentService {
     BigDecimal cancellationFee = calculateCancellationFee(payment);
 
     payment.setCancelled(true);
-    payment.setCancelledAt(LocalDateTime.now());
+    // Truncate to remove nanoseconds
+    payment.setCancelledAt(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
     payment.setCancellationFee(cancellationFee);
 
     // Save update payment to the database

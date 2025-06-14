@@ -2,6 +2,7 @@ package com.example.demo.payment;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -46,7 +47,8 @@ public class Payment {
     this.creditorIban = creditorIban;
     this.details = details;
     this.creditorBic = creditorBic;
-    this.createdAt = LocalDateTime.now();
+    // Truncate to remove nanoseconds
+    this.createdAt = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
     this.cancelled = false;
   }
 
