@@ -20,6 +20,10 @@ public class PaymentMapper {
         payment.getDebtorIban(),
         payment.getCreditorIban(),
         payment.getDetails(),
-        payment.getCreditorBic());
+        payment.getCreditorBic(),
+        payment.getCreatedAt(),
+        payment.getCancelledAt(),
+        payment.getCancellationFee(),
+        payment.isCancelled());
   }
 }
