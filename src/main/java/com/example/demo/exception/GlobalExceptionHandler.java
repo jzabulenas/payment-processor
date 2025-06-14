@@ -27,4 +27,14 @@ public class GlobalExceptionHandler {
 
     return ResponseEntity.badRequest().body(errors);
   }
+
+  @ExceptionHandler(PaymentValidationException.class)
+  public ResponseEntity<Map<String, String>> handlePaymentValidationException(
+      PaymentValidationException ex) {
+
+    Map<String, String> error = new HashMap<>();
+    error.put("error", ex.getMessage());
+
+    return ResponseEntity.badRequest().body(error);
+  }
 }
