@@ -119,4 +119,11 @@ public class PaymentService {
       case TYPE3 -> new BigDecimal("0.15");
     };
   }
+
+  public PaymentSpecificDTO getPaymentSpecific(long id) {
+    Payment payment = this.paymentRepository.findById(id).orElseThrow();
+
+    return new PaymentSpecificDTO(payment.getId(),
+        payment.getCancellationFee());
+  }
 }
