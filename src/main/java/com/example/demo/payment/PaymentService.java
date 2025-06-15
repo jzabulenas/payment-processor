@@ -121,7 +121,8 @@ public class PaymentService {
   }
 
   public PaymentSpecificDTO getPaymentSpecific(long id) {
-    Payment payment = this.paymentRepository.findById(id).orElseThrow();
+    Payment payment = this.paymentRepository.findById(id)
+        .orElseThrow(() -> new PaymentNotFoundException("Payment not found with id: " + id));
 
     return new PaymentSpecificDTO(payment.getId(),
         payment.getCancellationFee());
